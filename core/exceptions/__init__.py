@@ -14,14 +14,12 @@ from .user import (
     DuplicateUsernameException,
     UserNotFoundException,
     UserWrongPasswordException,
-    UserNotValidEmail
+    UserNotValidEmail,
+    UserAlreadyVoteException
 )
-from .credits import CreditsNotEnoughException
-from .presentations import (
-    PresentationNotGenerateException,
-    TextNotGenerateException
+from .publication import (
+    PublicationTooBigException
 )
-
 
 __all__ = [
     "CustomException",
@@ -39,7 +37,6 @@ __all__ = [
     "UserNotFoundException",
     "UserWrongPasswordException",
     "UserNotValidEmail",
-    "CreditsNotEnoughException",
-    "PresentationNotGenerateException",
-    "TextNotGenerateException"
+    "UserAlreadyVoteException",
+    "PublicationTooBigException"
 ]
