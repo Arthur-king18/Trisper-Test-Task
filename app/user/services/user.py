@@ -1,14 +1,13 @@
-import ast
+from typing import Optional, List
 
 from typing import Optional, List
 
-from sqlalchemy import or_, select, and_
+from passlib.context import CryptContext
+from sqlalchemy import select
 
-from app.user.models import User, Referral
+from app.user.models import User
 from app.user.schemas.user import LoginResponseSchema
 from core.db import Transactional, session
-from core.config import WAITLIST
-from passlib.context import CryptContext
 from core.exceptions import (
     PasswordDoesNotMatchException,
     DuplicateEmailException,
@@ -27,7 +26,6 @@ class UserService:
 
     def verify_password(self, plain_password, hashed_password):
         return pwd_context.verify(plain_password, hashed_password)
-
 
     def get_password_hash(self, password):
         return pwd_context.hash(password)
@@ -48,6 +46,17 @@ class UserService:
         query = query.limit(limit)
         result = await session.execute(query)
         return result.scalars().all()
+
+    async def get_user_by_user_id(
+            self,
+            user_id: int
+    ) -> User:
+        query = select(User).where(User.id == user_id)
+
+        result = await session.execute(query)
+
+        return result.scalars().one()
+
 
     @Transactional()
     async def create_user(
@@ -70,11 +79,8 @@ class UserService:
         if is_username_exist:
             raise DuplicateUsernameException
 
-        credits = 2000 if email in ast.literal_eval(WAITLIST) else 400
-        user = User(email=email, password=pwd_context.hash(password1), username=username, full_name=full_name,
-                    credits=credits)
+        user = User(email=email, password=pwd_context.hash(password1), username=username, full_name=full_name)
 
-        user.referral.append(Referral())
         session.add(user)
 
     async def is_admin(self, user_id: int) -> bool:
