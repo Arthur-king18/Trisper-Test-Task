@@ -29,7 +29,8 @@ fileConfig(config.config_file_name)
 # For auto generate schemas
 from core.config import WRITE_DB_URL
 from app.user.models import *
-from app.presentation.models import *
+from app.publication.models import *
+from app.vote.models import *
 
 section = config.config_ini_section
 config.set_section_option(section, 'WRITE_DB_URL', WRITE_DB_URL)
