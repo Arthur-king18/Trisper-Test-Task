@@ -94,14 +94,14 @@ poetry shell && poetry install
 6. Вводишь `Bearer полученный токен`
 7. Ты авторизован, можешь делать всё, что хочешь !!!
 
-![Иллюстрация к проекту](https://github.com/Arthur-king18/Trisper-Test-Task/main/image/image.png)
+![Иллюстрация к проекту](https://github.com/Arthur-king18/Trisper-Test-Task/tree/main/image/image.png)
 
 ## Tests
 
 ### Run
 `pytest -v tests/`
 
-![Тесты](https://github.com/Arthur-king18/Trisper-Test-Task/main/image/test.png)
+![Тесты](https://github.com/Arthur-king18/Trisper-Test-Task/tree/main/image/test.png)
 
 
 # Спасибо, что дочитал до конца!
