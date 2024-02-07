@@ -1,0 +1,1 @@
+from app.publication.models.publication import Publication, Base

@@ -33,3 +33,10 @@ class UserNotFoundException(CustomException):
     error_code = "USER__NOT_FOUND"
     message = "user not found"
 
+class UserAlreadyVoteException(CustomException):
+    code = 400
+    error_code = "USER__ALREADY_VOTE"
+    message = "user already vote"
+
+
+

@@ -6,7 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from api import router
-from api.home.home import home_router
 from core.config import config
 from core.exceptions import CustomException
 from core.fastapi.dependencies import Logging
@@ -16,11 +15,9 @@ from core.fastapi.middlewares import (
     SQLAlchemyMiddleware,
     ResponseLogMiddleware,
 )
-from core.helpers.cache import Cache, RedisBackend, CustomKeyMaker
 
 
 def init_routers(app_: FastAPI) -> None:
-    app_.include_router(home_router)
     app_.include_router(router)
 
 
@@ -67,14 +64,10 @@ def make_middleware() -> List[Middleware]:
     return middleware
 
 
-def init_cache() -> None:
-    Cache.init(backend=RedisBackend(), key_maker=CustomKeyMaker())
-
-
 def create_app() -> FastAPI:
     app_ = FastAPI(
-        title="Glimmer AI",
-        description="Glimmer AI API",
+        title="Trisper Test Task",
+        description="Trisper Test Task",
         version="1.0.0",
         docs_url=None if config.ENV == "production" else "/docs",
         redoc_url=None if config.ENV == "production" else "/redoc",
@@ -83,7 +76,6 @@ def create_app() -> FastAPI:
     )
     init_routers(app_=app_)
     init_listeners(app_=app_)
-    init_cache()
     return app_
 
 

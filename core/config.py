@@ -1,15 +1,14 @@
 import os
+from pathlib import Path
 
 from pydantic import BaseModel
-# from pydantic import BaseSettings
 from dotenv import load_dotenv
 
-load_dotenv()
+dotenv_path = Path('.env.local')
+load_dotenv(dotenv_path=dotenv_path)
 WRITE_DB_URL = os.environ.get('WRITE_DB_URL')
 READ_DB_URL = os.environ.get('READ_DB_URL')
-WAITLIST = os.environ.get('WAITLIST')
-EDEN_API = os.environ.get('EDEN_API')
-DOMAIN = os.environ.get('DOMAIN')
+TEST_DB_URL = os.environ.get('TEST_DB_URL')
 
 class Config(BaseModel):
     ENV: str = "development"
@@ -18,25 +17,21 @@ class Config(BaseModel):
     APP_PORT: int = 8000
     WRITER_DB_URL: str = WRITE_DB_URL
     READER_DB_URL: str = READ_DB_URL
+    TEST_DB_URL: str = TEST_DB_URL
     JWT_SECRET_KEY: str = "threhgrgerg"
     JWT_ALGORITHM: str = "HS256"
     SENTRY_SDN: str = None
-    CELERY_BROKER_URL: str = "amqp://user:bitnami@localhost:5672/"
-    CELERY_BACKEND_URL: str = "redis://:password123@localhost:6379/0"
-    REDIS_HOST: str = "localhost"
-    REDIS_PORT: int = 6379
-
 
 class DevelopmentConfig(Config):
     WRITER_DB_URL: str = WRITE_DB_URL
     READER_DB_URL: str = READ_DB_URL
-    REDIS_HOST: str = "redis"
-    REDIS_PORT: int = 6379
+    TEST_DB_URL: str = TEST_DB_URL
 
 
 class LocalConfig(Config):
     WRITER_DB_URL: str = WRITE_DB_URL
     READER_DB_URL: str = READ_DB_URL
+    TEST_DB_URL: str = TEST_DB_URL
 
 
 class ProductionConfig(Config):

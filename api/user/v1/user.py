@@ -14,9 +14,9 @@ from app.user.schemas import (
 from app.user.services import UserService
 from core.fastapi.dependencies import (
     PermissionDependency,
-    IsAdmin,
+    IsAuthenticated,
+    AllowAll
 )
-from core.utils import UserReferral
 
 user_router = APIRouter()
 
@@ -26,7 +26,7 @@ user_router = APIRouter()
     response_model=List[GetUserListResponseSchema],
     response_model_exclude={"password"},
     responses={"400": {"model": ExceptionResponseSchema}},
-    # dependencies=[Depends(PermissionDependency([IsAdmin]))],
+    dependencies=[Depends(PermissionDependency([IsAuthenticated]))],
 )
 async def get_user_list(
     limit: int = Query(10, description="Limit"),
@@ -39,12 +39,10 @@ async def get_user_list(
     "",
     response_model=CreateUserResponseSchema,
     responses={"400": {"model": ExceptionResponseSchema}},
+    dependencies=[Depends(PermissionDependency([AllowAll]))],
 )
-async def create_user(request: CreateUserRequestSchema, referral_id: UUID = Query(None)):
+async def create_user(request: CreateUserRequestSchema):
     await UserService().create_user(**request.dict())
-
-    if referral_id is not None:
-        await UserReferral().insert_referral(referral_id)
 
     return {"email": request.email, "username": request.username, "full_name": request.full_name}
 
@@ -53,6 +51,7 @@ async def create_user(request: CreateUserRequestSchema, referral_id: UUID = Quer
     "/login",
     response_model=LoginResponse,
     responses={"404": {"model": ExceptionResponseSchema}},
+    dependencies=[Depends(PermissionDependency([AllowAll]))],
 )
 async def login(request: LoginRequest):
     token = await UserService().login(email=request.email, password=request.password)
