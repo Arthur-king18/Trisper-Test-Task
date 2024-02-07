@@ -1,0 +1,1 @@
+from app.vote.models.vote import Vote, Base
